@@ -1,10 +1,11 @@
 // lib/supabase/server.js (or .ts)
 import { createServerClient } from '@supabase/ssr';
 // Remove 'import { cookies } from 'next/headers'' from here if it exists
+import { cookies } from 'next/headers';
 
 // Modify createClient to accept the cookie store
 // Add type hint if using TypeScript: (cookieStore: ReturnType<typeof import('next/headers').cookies>)
-export function createClient(cookieStore) {
+export function createClient(cookieStore: ReturnType<typeof cookies>) {
   return createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
