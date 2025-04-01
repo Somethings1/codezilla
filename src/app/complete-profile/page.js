@@ -24,7 +24,7 @@ export default function CompleteProfilePage() {
                const { data: profile } = await supabase.from('profiles').select('username').eq('id', session.user.id).single();
                if (profile && profile.username) {
                    message.info('Profile already completed.');
-                   router.push('/'); // Redirect if already completed
+                   router.push('/problems'); // Redirect if already completed
                }
            }
        };
