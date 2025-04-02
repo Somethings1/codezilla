@@ -1,0 +1,46 @@
+.fancy-handle {
+  position: relative;
+  background: transparent;
+  transition: background 0.2s ease;
+  z-index: 10;
+}
+
+.fancy-handle.horizontal {
+  width: 6px;
+  cursor: col-resize;
+}
+
+.fancy-handle.vertical {
+  height: 6px;
+  cursor: row-resize;
+}
+
+.fancy-handle:hover {
+  background: rgba(0, 0, 0, 0.08); /* subtle highlight */
+}
+
+/* pill in the center */
+.fancy-pill {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  background: #bbb;
+  border-radius: 9999px;
+  transform: translate(-50%, -50%);
+  transition: background 0.2s ease;
+}
+
+.fancy-handle.horizontal .fancy-pill {
+  width: 4px;
+  height: 40px;
+}
+
+.fancy-handle.vertical .fancy-pill {
+  width: 40px;
+  height: 4px;
+}
+
+.fancy-handle:hover .fancy-pill {
+  background: #888;
+}
+
