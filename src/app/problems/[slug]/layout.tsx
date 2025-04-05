@@ -5,6 +5,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { Tabs } from 'antd';
 import { ReactNode, use } from 'react';
 import { FancyHandle } from '@/components/FancyHandle';
+import CodeEditor from '@/components/CodeEditor';
 
 const tabs = [
     { label: 'Description', value: 'description' },
@@ -83,6 +84,7 @@ export default function ProblemLayout({
                                 }}
                             >
                                 {/* Here's your dynamic page content */}
+                                <CodeEditor />
                             </div>
                         </Panel>
 
