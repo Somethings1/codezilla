@@ -32,8 +32,6 @@ export async function POST(req: Request, { params }: { params: { slug: string } 
         data: { session },
         error: sessionError,
     } = await supabase.auth.getSession();
-    console.log('Session:', session);
-    console.log('Session error:', sessionError);
 
     if (sessionError || !session?.user) {
         return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401 });
