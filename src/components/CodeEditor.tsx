@@ -4,50 +4,78 @@ import { Select } from 'antd';
 import Editor from '@monaco-editor/react';
 import { useState, useEffect } from 'react';
 
-const languageTemplates: Record<string, string> = {
-  javascript: `function solve() {\n  // Your code here\n  return;\n}`,
-  python: `def solve():\n    # Your code here\n    pass`,
-  cpp: `#include <iostream>\nusing namespace std;\n\nint main() {\n  // Your code here\n  return 0;\n}`,
-  java: `public class Main {\n  public static void main(String[] args) {\n    // Your code here\n  }\n}`,
-  go: `package main\n\nimport "fmt"\n\nfunc main() {\n  // Your code here\n  fmt.Println("Hello, Go!")\n}`,
-  rust: `fn main() {\n  // Your code here\n  println!("Hello, Rust!");\n}`,
-  php: `<?php\n// Your code here\necho "Hello, PHP!";\n?>`,
-  swift: `import Foundation\n\n// Your code here\nprint("Hello, Swift!")`,
+const languageTemplates: Record<number, string> = {
+  63: `function solve() {\n  // Your code here\n  return;\n}`,
+  71: `def solve():\n    # Your code here\n    pass`,
+  54: `#include <iostream>\nusing namespace std;\n\nint main() {\n  // Your code here\n  return 0;\n}`,
+  62: `public class Main {\n  public static void main(String[] args) {\n    // Your code here\n  }\n}`,
+  60: `package main\n\nimport "fmt"\n\nfunc main() {\n  // Your code here\n  fmt.Println("Hello, Go!")\n}`,
+  73: `fn main() {\n  // Your code here\n  println!("Hello, Rust!");\n}`,
+  68: `<?php\n// Your code here\necho "Hello, PHP!";\n?>`,
+  83: `import Foundation\n\n// Your code here\nprint("Hello, Swift!")`,
 };
-
 const languageOptions = [
-  { value: 'javascript', label: 'JavaScript' },
-  { value: 'python', label: 'Python' },
-  { value: 'cpp', label: 'C++' },
-  { value: 'java', label: 'Java' },
-  { value: 'go', label: 'Golang' },
-  { value: 'rust', label: 'Rust' },
-  { value: 'php', label: 'PHP' },
-  { value: 'swift', label: 'Swift' },
+  { value: 63, label: 'JavaScript' },   // Node.js
+  { value: 71, label: 'Python' },       // Python 3
+  { value: 54, label: 'C++' },          // C++ (GCC 9.2.0)
+  { value: 62, label: 'Java' },         // Java (OpenJDK 13)
+  { value: 60, label: 'Golang' },       // Go (1.13.1)
+  { value: 73, label: 'Rust' },         // Rust
+  { value: 68, label: 'PHP' },          // PHP
+  { value: 83, label: 'Swift' },        // Swift
 ];
 
-export default function CodeEditor() {
-  const [language, setLanguage] = useState('javascript');
-  const [code, setCode] = useState(languageTemplates['javascript']);
+function getMonacoLanguageFromId(id: number): string {
+  switch (id) {
+    case 63:
+      return 'javascript';
+    case 71:
+      return 'python';
+    case 54:
+      return 'cpp';
+    case 62:
+      return 'java';
+    case 60:
+      return 'go';
+    case 73:
+      return 'rust';
+    case 68:
+      return 'php';
+    case 83:
+      return 'swift';
+    default:
+      return 'plaintext';
+  }
+}
 
+export default function CodeEditor({
+  code,
+  onCodeChange,
+  languageId,
+  onLanguageChange,
+}: {
+  code: string;
+  onCodeChange: (value: string) => void;
+  languageId: number;
+  onLanguageChange: (id: number) => void;
+}) {
   useEffect(() => {
-    setCode(languageTemplates[language]);
-  }, [language]);
+    onCodeChange(languageTemplates[languageId]);
+  }, [languageId]);
 
   return (
     <div style={{ height: '100%' }}>
       <Select
-        style={{ width: 200 }}
+        style={{ width: 100 }}
         options={languageOptions}
-        value={language}
-        onChange={setLanguage}
+        value={languageId}
+        onChange={onLanguageChange}
       />
-
       <Editor
         height="100%"
-        language={language}
+        language={getMonacoLanguageFromId(languageId)}
         value={code}
-        onChange={(value) => setCode(value || '')}
+        onChange={(value) => onCodeChange(value || '')}
         theme="vs-light"
         options={{
           fontSize: 14,

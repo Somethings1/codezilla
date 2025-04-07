@@ -2,10 +2,11 @@
 
 import { Panel, PanelGroup } from 'react-resizable-panels';
 import { usePathname, useRouter } from 'next/navigation';
-import { Tabs } from 'antd';
-import { ReactNode, use } from 'react';
+import { List, Card, Typography, Tabs, Button, message } from 'antd';
+import { ReactNode, use, useState } from 'react';
 import { FancyHandle } from '@/components/FancyHandle';
 import CodeEditor from '@/components/CodeEditor';
+import { useTestcases } from '@/hooks/useTestcases';
 
 const tabs = [
     { label: 'Description', value: 'description' },
@@ -23,6 +24,11 @@ export default function ProblemLayout({
     const pathname = usePathname();
     const router = useRouter();
     const { slug } = use(params);
+    const { testcases, loading: testcasesLoading } = useTestcases(slug);
+    const [code, setCode] = useState('');
+    const [language, setLanguage] = useState(63);
+    const [outputTab, setOutputTab] = useState('testcase');
+    const [output, setOutput] = useState('Click on \`Run code\` to see output');
 
     const activeKey = tabs.find((tab) =>
         pathname?.endsWith(`/${tab.value}`)
@@ -32,8 +38,70 @@ export default function ProblemLayout({
         router.push(`/problems/${slug}/${key}`);
     };
 
+    const handleRunCode = async () => {
+        try {
+            if (!code || !language) {
+                message.warning('Missing code or language.');
+                return;
+            }
+
+            const publicTestcases = testcases.filter(tc => !tc.is_hidden);
+
+            const response = await fetch('/api/run', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    source_code: code,
+                    language_id: language,
+                    testcases: publicTestcases,
+                    slug,
+                }),
+            });
+
+            const result = await response.json();
+
+            if (!result.results || !Array.isArray(result.results)) {
+                setOutput('No output returned.');
+            } else {
+                // Map each result to a more readable format
+                const formattedOutput = result.results.map((res, index) => {
+                    const status = res.status?.description || 'Unknown';
+                    const stdout = res.stdout?.trim() || 'No output';
+                    const stderr = res.stderr || '';
+                    const compileOutput = res.compile_output || '';
+                    const extra = stderr || compileOutput;
+
+                    return `Test Case #${index + 1}:\nStatus: ${status}\nOutput: ${stdout}${extra ? `\nError:\n${extra}` : ''}`;
+                }).join('\n\n');
+
+                setOutput(formattedOutput);
+            }
+
+            setOutputTab('output');
+        } catch (err) {
+            console.error('Run failed:', err);
+            message.error('Something went wrong running your code.');
+        }
+    };
+
     return (
         <div style={{ height: '97vh', width: '99vw' }}>
+            <div style={{
+                display: 'flex',
+                justifyContent: 'center',
+                gap: '1rem',
+                padding: '1rem',
+                background: '#fff',
+                border: '1px solid #ddd',
+                borderRadius: '6px',
+                marginBottom: '0.5rem',
+                boxShadow: '0 1px 3px rgba(0, 0, 0, 0.05)',
+            }}>
+                <Button type="primary" onClick={handleRunCode}>Run Code</Button>
+                <Button type="default">Submit</Button>
+            </div>
             <PanelGroup direction="horizontal">
                 {/* LEFT PANE (AntD Tabs) */}
                 <Panel defaultSize={50}>
@@ -84,7 +152,12 @@ export default function ProblemLayout({
                                 }}
                             >
                                 {/* Here's your dynamic page content */}
-                                <CodeEditor />
+                                <CodeEditor
+                                    code={code}
+                                    onCodeChange={setCode}
+                                    languageId={language}
+                                    onLanguageChange={setLanguage}
+                                />
                             </div>
                         </Panel>
 
@@ -105,8 +178,52 @@ export default function ProblemLayout({
                                     boxSizing: 'border-box',
                                 }}
                             >
-                                <h3>🧪 Test Output</h3>
-                                <p>Where you’ll watch your code cry.</p>
+                                <Tabs
+                                    activeKey={outputTab}
+                                    onChange={setOutputTab}
+                                    items={[
+                                        {
+                                            key: 'testcase',
+                                            label: '🧾 Testcase',
+                                            children: testcasesLoading ? (
+                                                <p>Loading testcases...</p>
+                                            ) : (
+                                                <List
+                                                    dataSource={testcases}
+                                                    loading={testcasesLoading}
+                                                    renderItem={(tc, index) => (
+                                                        <List.Item>
+                                                            <Card
+                                                                title={`Testcase ${index + 1}`}
+                                                                bordered
+                                                                style={{ width: '100%' }}
+                                                            >
+                                                                <Typography.Paragraph>
+                                                                    <strong>Input:</strong>
+                                                                    <pre>{tc.input}</pre>
+                                                                </Typography.Paragraph>
+                                                                <Typography.Paragraph>
+                                                                    <strong>Expected Output:</strong>
+                                                                    <pre>{tc.expected_output}</pre>
+                                                                </Typography.Paragraph>
+                                                            </Card>
+                                                        </List.Item>
+                                                    )}
+                                                />
+                                            ),
+                                        },
+                                        {
+                                            key: 'output',
+                                            label: '📤 Output',
+                                            children: (
+                                                <div>
+                                                    <pre className="bg-white p-2 rounded border">{output}</pre>
+                                                </div>
+                                            ),
+                                        },
+                                    ]}
+                                />
+
                             </div>
                         </Panel>
                     </PanelGroup>
