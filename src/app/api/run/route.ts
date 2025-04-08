@@ -7,8 +7,7 @@ export async function POST(req: Request) {
     const { slug, language_id, source_code, testcases } = await req.json();
 
 
-    const cookieStore = cookies();
-    const supabase = createServer(cookieStore);
+    const supabase = await createServer();
 
     const {
         data: { session },

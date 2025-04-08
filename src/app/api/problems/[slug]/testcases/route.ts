@@ -7,8 +7,7 @@ export async function GET(
     req: Request,
     { params }: { params: { slug: string } }
 ) {
-    const cookieStore = cookies();
-    const supabase = createClient(cookieStore);
+    const supabase = await createClient();
     const { slug } = params;
 
     const { data, error } = await supabase

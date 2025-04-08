@@ -5,7 +5,8 @@ import { cookies } from 'next/headers';
 
 // Modify createClient to accept the cookie store
 // Add type hint if using TypeScript: (cookieStore: ReturnType<typeof import('next/headers').cookies>)
-export function createClient(cookieStore: ReturnType<typeof cookies>) {
+export async function createClient() {
+  const cookieStore = await cookies();
   return createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,

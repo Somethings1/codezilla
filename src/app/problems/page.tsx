@@ -10,7 +10,7 @@ export default async function ProblemsPage() {
   // Call cookies() once at the top level of the Server Component
   const cookieStore = cookies();
   // Pass the cookie store instance to your createClient helper
-  const supabase = createClient(cookieStore);
+  const supabase = await createClient();
 
   // Use getUser() for authenticated data fetching - it validates the session server-side
   const { data: { user }, error: userError } = await supabase.auth.getUser();
