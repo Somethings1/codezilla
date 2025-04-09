@@ -3,6 +3,7 @@
 import { Select } from 'antd';
 import Editor from '@monaco-editor/react';
 import { useState, useEffect } from 'react';
+import getMonacoLanguageFromId from '@/lib/utils/monacoLanguageFromId';
 
 const languageTemplates: Record<number, string> = {
   63: `function solve() {\n  // Your code here\n  return;\n}`,
@@ -24,29 +25,6 @@ const languageOptions = [
   { value: 68, label: 'PHP' },          // PHP
   { value: 83, label: 'Swift' },        // Swift
 ];
-
-function getMonacoLanguageFromId(id: number): string {
-  switch (id) {
-    case 63:
-      return 'javascript';
-    case 71:
-      return 'python';
-    case 54:
-      return 'cpp';
-    case 62:
-      return 'java';
-    case 60:
-      return 'go';
-    case 73:
-      return 'rust';
-    case 68:
-      return 'php';
-    case 83:
-      return 'swift';
-    default:
-      return 'plaintext';
-  }
-}
 
 export default function CodeEditor({
   code,
