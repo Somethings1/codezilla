@@ -1,6 +1,7 @@
 Circle
 Medium
 Math,Geometry
+20
 ---
 
 Bob vừa phát minh một chiếc máy đo bán kính hình tròn. Máy đo này chỉ ra bán kính r (là một số nguyên) của hình tròn. Bob cần bạn giúp tính toán các thông số hình học của hình tròn:

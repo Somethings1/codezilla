@@ -1,8 +1,3 @@
-"""
-This script gets all problems from ./sample_problems and inserts them into
-Supabase database. The first 2 test cases of each problem are public by default.
-"""
-
 import os
 from supabase import create_client
 from dotenv import load_dotenv
@@ -37,7 +32,7 @@ def get_tag_ids(tag_names):
     return tag_ids
 
 
-def insert_problem(title, description, difficulty_name, tag_names):
+def insert_problem(title, description, difficulty_name, tag_names, score):
     difficulty_id = get_difficulty_id(difficulty_name)
     if difficulty_id is None:
         print(f"Invalid difficulty: {difficulty_name}")
@@ -47,6 +42,7 @@ def insert_problem(title, description, difficulty_name, tag_names):
         "title": title,
         "description": description,
         "difficulty_id": difficulty_id,
+        "score": score,  # Insert the score field
         "created_by": None
     }
     response = supabase.table("problems").insert(data).execute()
@@ -93,7 +89,10 @@ def process_problems(directory):
             tags = lines[2].strip()
             description = "".join(lines[5:]).strip()
 
-        problem_id = insert_problem(title, description, difficulty, tags)
+            # New score field at line 4
+            score = int(lines[3].strip())  # Convert the score to an integer
+
+        problem_id = insert_problem(title, description, difficulty, tags, score)
 
         if problem_id and os.path.exists(input_dir) and os.path.exists(output_dir):
             input_files = sorted(os.listdir(input_dir))
@@ -113,3 +112,4 @@ def process_problems(directory):
 
 if __name__ == "__main__":
     process_problems("./sample_problems")
+

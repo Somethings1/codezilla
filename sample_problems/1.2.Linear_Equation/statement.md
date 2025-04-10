@@ -1,6 +1,7 @@
 Equation
 Medium
 Math
+15
 ---
 
 Bạn là một lập trình viên đang giải quyết bài toán tìm nghiệm của phương trình bậc nhất ax + b = c. Phương trình này có ba hệ số a, b, và c là các số nguyên. Bạn cần phải tính toán nghiệm của phương trình này. Đảm bảo a ≠ 0, bạn có thể tính nghiệm bằng công thức x = (c - b) / a.

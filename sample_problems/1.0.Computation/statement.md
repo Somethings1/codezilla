@@ -1,6 +1,7 @@
 Computation
 Easy
 Math
+10
 ---
 
 Một ngày nọ, Alice và Bob tranh luận với nhau về các phép toán cơ bản. Alice chọn hai số nguyên dương a và b (cả hai đều không vượt quá 1 tỷ). Bob yêu cầu Alice tính toán các giá trị sau:
