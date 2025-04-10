@@ -86,6 +86,41 @@ export default function ProblemLayout({
         }
     };
 
+    const handleSubmitCode = async () => {
+        try {
+            if (!code || !language) {
+                message.warning('Please write some code and select a language.');
+                return;
+            }
+
+            const response = await fetch('/api/submit', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    source_code: code,
+                    language_id: language,
+                    slug,
+                }),
+            });
+
+            const result = await response.json();
+
+            if (!response.ok || !result || result.error) {
+                message.error('Submission failed.');
+                return;
+            }
+
+            message.success('Submission sent successfully. Redirecting to submissions...');
+            router.push(`/problems/${slug}/submissions`);
+        } catch (error) {
+            console.error('Submit failed:', error);
+            message.error('Something went wrong submitting your code.');
+        }
+    };
+
+
     return (
         <div style={{ height: '97vh', width: '99vw' }}>
             <div style={{
@@ -100,7 +135,7 @@ export default function ProblemLayout({
                 boxShadow: '0 1px 3px rgba(0, 0, 0, 0.05)',
             }}>
                 <Button type="primary" onClick={handleRunCode}>Run Code</Button>
-                <Button type="default">Submit</Button>
+                <Button type="default" onClick={handleSubmitCode}>Submit</Button>
             </div>
             <PanelGroup direction="horizontal">
                 {/* LEFT PANE (AntD Tabs) */}
