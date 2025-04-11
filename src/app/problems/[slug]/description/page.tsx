@@ -19,7 +19,7 @@ export default function DescriptionPage({ params }: { params: Promise<{ slug: st
 
     return (
         <div>
-            <h2>{problem.title}</h2>
+            <h2>{slug + '. ' + problem.title}</h2>
             <p><strong>Difficulty:</strong> {problem.difficulty?.difficulty_name}</p>
             <ReactMarkdown
                 remarkPlugins={[remarkGfm]}
