@@ -4,15 +4,18 @@ import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 export const runtime = 'nodejs';
 
-
-export async function GET(
-    req: Request,
-    { params }: { params: { slug: string } }
-) {
+export async function GET(req: Request, { params }: { params: { slug: string } }) {
+    const supabase = createClient();
     const { slug } = params;
-    const { data, error } = await createClient()
+
+    const { data, error } = await supabase
         .from('comments')
-        .select('id, content, created_at, user_id')
+        .select(`
+            id,
+            user_id,
+            content,
+            created_at
+        `)
         .eq('problem_id', Number(slug))
         .order('created_at', { ascending: false });
 
@@ -24,9 +27,9 @@ export async function GET(
 }
 
 export async function POST(req: Request, { params }: { params: { slug: string } }) {
-    const cookieStore = cookies();
-    const supabase = createServer(cookieStore);
+    const supabase = await createServer();
     const { content } = await req.json();
+    const { slug } = params;
 
     const {
         data: { session },
@@ -43,7 +46,7 @@ export async function POST(req: Request, { params }: { params: { slug: string } 
         .from('comments')
         .insert({
             user_id: userId,
-            problem_id: Number(params.slug),
+            problem_id: Number(slug),
             content,
         })
         .select()
