@@ -42,7 +42,7 @@ export default function CodeEditor({
   }, [languageId]);
 
   return (
-    <div style={{ height: '100%' }}>
+    <div style={{ height: '90%' }}>
       <Select
         style={{ width: 100 }}
         options={languageOptions}
@@ -54,7 +54,7 @@ export default function CodeEditor({
         language={getMonacoLanguageFromId(languageId)}
         value={code}
         onChange={(value) => onCodeChange(value || '')}
-        theme="vs-light"
+        theme="vs-dark"
         options={{
           fontSize: 14,
           minimap: { enabled: false },

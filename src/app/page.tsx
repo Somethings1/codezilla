@@ -11,7 +11,7 @@ export default function WelcomePage() {
     return (
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '80vh' }}>
             <Card style={{ maxWidth: '500px', textAlign: 'center', padding: '20px' }}>
-                <Title level={2}>Welcome to Your LeetCode Clone!</Title>
+                <Title level={2}>Welcome to Codezilla!</Title>
                 <Paragraph>
                     The place where you might, possibly, if you really try, solve some coding problems. Or just look at them. Your choice, really.
                 </Paragraph>
