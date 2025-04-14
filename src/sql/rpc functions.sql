@@ -103,11 +103,11 @@ order by
 $$ language sql;
 
 create or replace function get_recent_ac_problems(user_id uuid)
-returns table(problem_id uuid, problem_name text) as
+returns table(problem_id int, problem_name text) as
 $$
 select
     usp.problem_id,
-    p.name as problem_name
+    p.title as problem_name
 from
     user_solved_problems usp
 join
@@ -118,4 +118,5 @@ order by
     usp.first_ac_time desc
 limit 10;
 $$ language sql;
+
 
