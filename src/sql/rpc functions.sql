@@ -47,17 +47,19 @@ $$
 with monthly_score as (
     select
         date_trunc('month', usp.first_ac_time) as month,
-        p.score
+        sum(p.score) as total_score -- Group problems per month
     from
         user_solved_problems usp
     join
         problems p on usp.problem_id = p.id
     where
         usp.user_id = $1
+    group by
+        date_trunc('month', usp.first_ac_time)
 )
 select
     month,
-    sum(score) over (
+    sum(total_score) over (
         order by month
         rows between unbounded preceding and current row
     ) as score
