@@ -2,6 +2,7 @@
 import { ConfigProvider, theme } from 'antd';
 import { StyleProvider } from '@ant-design/cssinjs'; // THIS!
 import 'antd/dist/reset.css';
+import './style.css';
 
 export default function RootLayout({
   children,
