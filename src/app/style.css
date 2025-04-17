@@ -1,0 +1,46 @@
+
+            /* Styles for react-calendar-heatmap */
+            .react-calendar-heatmap .color-github-0 { fill: #232323!important; } /* Lightest grey for 0 */
+            .react-calendar-heatmap .color-github-1 { fill: #c6e48b!important; }
+            .react-calendar-heatmap .color-github-2 { fill: #7bc96f!important; }
+            .react-calendar-heatmap .color-github-3 { fill: #239a3b!important; }
+            .react-calendar-heatmap .color-github-4 { fill: #196127!important; } /* Darkest green */
+
+            /* Optional: Improve default heatmap appearance */
+            .react-calendar-heatmap text {
+                font-size: 9px;
+                fill: #555;
+            }
+            .react-calendar-heatmap rect:hover {
+                stroke: #555;
+                stroke-width: 1px;
+            }
+
+            /* Styles for custom Recharts Tooltip */
+             .custom-recharts-tooltip {
+                background-color: rgba(255, 255, 255, 0.9);
+                border: 1px solid #ccc;
+                padding: 10px;
+                border-radius: 4px;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+                font-size: 12px;
+            }
+            .custom-recharts-tooltip .label {
+                font-weight: bold;
+                margin-bottom: 5px;
+                color: #333;
+            }
+             .custom-recharts-tooltip .intro {
+                color: #666;
+             }
+
+             /* Styles for react-tooltip v5 */
+             #heatmap-tooltip {
+                 background-color: #333 !important; /* Example dark tooltip */
+                 color: #fff !important;
+                 border-radius: 4px !important;
+                 padding: 5px 10px !important;
+                 font-size: 12px !important;
+                 box-shadow: 0 2px 4px rgba(0,0,0,0.2) !important;
+                 z-index: 9999 !important;
+            }
